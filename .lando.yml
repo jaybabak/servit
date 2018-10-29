@@ -1,0 +1,4 @@
+name: waiter
+recipe: lamp
+config:
+  webroot: .
