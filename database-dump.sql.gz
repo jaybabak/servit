@@ -1,0 +1,688 @@
+-- MySQL dump 10.13  Distrib 5.7.24, for Linux (x86_64)
+--
+-- Host: localhost    Database: laravel
+-- ------------------------------------------------------
+-- Server version	5.7.24
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `bans`
+--
+
+DROP TABLE IF EXISTS `bans`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `bans` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `bannable_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `bannable_id` bigint(20) unsigned NOT NULL,
+  `created_by_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_by_id` bigint(20) unsigned DEFAULT NULL,
+  `comment` text COLLATE utf8mb4_unicode_ci,
+  `expired_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `bans_bannable_type_bannable_id_index` (`bannable_type`,`bannable_id`),
+  KEY `bans_created_by_type_created_by_id_index` (`created_by_type`,`created_by_id`),
+  KEY `bans_expired_at_index` (`expired_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `bans`
+--
+
+LOCK TABLES `bans` WRITE;
+/*!40000 ALTER TABLE `bans` DISABLE KEYS */;
+/*!40000 ALTER TABLE `bans` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `categories`
+--
+
+DROP TABLE IF EXISTS `categories`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `categories` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `parent_id` int(10) unsigned DEFAULT NULL,
+  `order` int(11) DEFAULT '1',
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `slug` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `hash` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `categories_parent_id_foreign` (`parent_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `categories`
+--
+
+LOCK TABLES `categories` WRITE;
+/*!40000 ALTER TABLE `categories` DISABLE KEYS */;
+INSERT INTO `categories` VALUES (1,0,1,'General','',NULL,'2018-10-30 01:06:03','2018-10-30 01:06:03');
+/*!40000 ALTER TABLE `categories` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `category_pricing_model`
+--
+
+DROP TABLE IF EXISTS `category_pricing_model`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `category_pricing_model` (
+  `category_id` int(11) DEFAULT NULL,
+  `pricing_model_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `category_pricing_model`
+--
+
+LOCK TABLES `category_pricing_model` WRITE;
+/*!40000 ALTER TABLE `category_pricing_model` DISABLE KEYS */;
+INSERT INTO `category_pricing_model` VALUES (1,1);
+/*!40000 ALTER TABLE `category_pricing_model` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `conversations`
+--
+
+DROP TABLE IF EXISTS `conversations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `conversations` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_one` int(11) NOT NULL,
+  `user_two` int(11) NOT NULL,
+  `status` tinyint(1) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `conversations`
+--
+
+LOCK TABLES `conversations` WRITE;
+/*!40000 ALTER TABLE `conversations` DISABLE KEYS */;
+/*!40000 ALTER TABLE `conversations` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `favorites`
+--
+
+DROP TABLE IF EXISTS `favorites`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `favorites` (
+  `user_id` int(10) unsigned NOT NULL,
+  `favoriteable_id` int(10) unsigned NOT NULL,
+  `favoriteable_type` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`user_id`,`favoriteable_id`,`favoriteable_type`),
+  KEY `favorites_favoriteable_id_favoriteable_type_index` (`favoriteable_id`,`favoriteable_type`),
+  KEY `favorites_user_id_index` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `favorites`
+--
+
+LOCK TABLES `favorites` WRITE;
+/*!40000 ALTER TABLE `favorites` DISABLE KEYS */;
+/*!40000 ALTER TABLE `favorites` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `filters`
+--
+
+DROP TABLE IF EXISTS `filters`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `filters` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `position` int(11) DEFAULT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `field` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `search_ui` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `form_input_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `form_input_meta` text COLLATE utf8mb4_unicode_ci,
+  `is_category_specific` tinyint(1) DEFAULT '0',
+  `is_searchable` tinyint(1) DEFAULT '0',
+  `is_hidden` tinyint(1) DEFAULT '0',
+  `is_default` tinyint(1) DEFAULT '0',
+  `categories` text COLLATE utf8mb4_unicode_ci,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `filters`
+--
+
+LOCK TABLES `filters` WRITE;
+/*!40000 ALTER TABLE `filters` DISABLE KEYS */;
+INSERT INTO `filters` VALUES (1,3,'Price','price','priceRange',NULL,NULL,0,1,0,1,NULL,'2018-10-30 01:06:03','2018-10-30 01:06:03'),(2,2,'Categories','category_id','category',NULL,NULL,NULL,1,0,1,'[]','2018-10-30 01:06:03','2018-10-30 01:06:03'),(3,1,'Distance','distance','distance',NULL,NULL,0,1,0,1,NULL,'2018-10-30 01:06:03','2018-10-30 01:06:03');
+/*!40000 ALTER TABLE `filters` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `listings`
+--
+
+DROP TABLE IF EXISTS `listings`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `listings` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `key` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `category_id` int(11) DEFAULT NULL,
+  `pricing_model_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `blurb` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `photo` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `quantity` int(11) DEFAULT '0',
+  `stock` int(11) DEFAULT '1',
+  `photos` text COLLATE utf8mb4_unicode_ci,
+  `description` text COLLATE utf8mb4_unicode_ci,
+  `spotlight` datetime DEFAULT NULL,
+  `staff_pick` tinyint(1) DEFAULT NULL,
+  `views_count` int(11) DEFAULT NULL,
+  `unit` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `min_units` int(11) DEFAULT '1',
+  `max_units` int(11) DEFAULT NULL,
+  `min_duration` int(11) DEFAULT NULL,
+  `max_duration` int(11) DEFAULT NULL,
+  `session_duration` int(11) DEFAULT NULL,
+  `pricing_models` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `price` decimal(11,2) DEFAULT NULL,
+  `currency` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `location` point DEFAULT NULL,
+  `lat` decimal(10,8) DEFAULT NULL,
+  `lng` decimal(11,8) DEFAULT NULL,
+  `meta` text COLLATE utf8mb4_unicode_ci,
+  `city` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `country` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `seller_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `variant_options` text COLLATE utf8mb4_unicode_ci,
+  `vendor` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `timeslots` text COLLATE utf8mb4_unicode_ci,
+  `tags` text COLLATE utf8mb4_unicode_ci,
+  `tags_string` text COLLATE utf8mb4_unicode_ci,
+  `units_in_product_display` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `price_per_unit_display` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `locale` varchar(2) COLLATE utf8mb4_unicode_ci DEFAULT 'en',
+  `is_private` tinyint(1) DEFAULT '0',
+  `is_published` tinyint(1) DEFAULT '0',
+  `is_admin_verified` datetime DEFAULT NULL,
+  `is_disabled` datetime DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `listings`
+--
+
+LOCK TABLES `listings` WRITE;
+/*!40000 ALTER TABLE `listings` DISABLE KEYS */;
+INSERT INTO `listings` VALUES (1,NULL,1,1,'1','My First Listing',NULL,NULL,0,1,'{\"1\":\"https://marketplace-kit.s3.amazonaws.com/default_listing.jpg\"}','<p>Welcome to MarketPlaceKit. This is your first listing. Edit or delete it, then start add listings!</p><p><br></p><p class=\"ql-align-justify\">\"The buyer is entitled to a bargain. The seller is entitled to a profit. So there is a fine margin in between where the price is right. I have found this to be true to this day whether dealing in paper hats, winter underwear or hotels.\"</p><p class=\"ql-align-justify\">-  <span>Conrad Hilton</span></p>',NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,'buy',15.00,'GBP',_binary '\0\0\0\0\0\0\0\ÐoN\Ûu%º¿0žACÁI@',51.61100420,-0.10213410,'[]','London','UK',NULL,'{\"Primary colour\": [\"Blue\", \"Red\", \"Green\"], \"Size\": [\"XL\", \"XS\", \"SM\"]}',NULL,NULL,NULL,NULL,NULL,NULL,'en',0,1,'2018-10-30 01:06:03',NULL,'2018-10-30 01:06:03','2018-10-30 01:06:03',NULL);
+/*!40000 ALTER TABLE `listings` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `ltm_translations`
+--
+
+DROP TABLE IF EXISTS `ltm_translations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ltm_translations` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `status` int(11) NOT NULL DEFAULT '0',
+  `locale` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `group` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `value` text COLLATE utf8mb4_unicode_ci,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `ltm_translations`
+--
+
+LOCK TABLES `ltm_translations` WRITE;
+/*!40000 ALTER TABLE `ltm_translations` DISABLE KEYS */;
+/*!40000 ALTER TABLE `ltm_translations` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `menus`
+--
+
+DROP TABLE IF EXISTS `menus`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `menus` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `locale` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `location` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `items` text COLLATE utf8mb4_unicode_ci,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `menus`
+--
+
+LOCK TABLES `menus` WRITE;
+/*!40000 ALTER TABLE `menus` DISABLE KEYS */;
+INSERT INTO `menus` VALUES (3,'en','top','[{\"url\":\"\\/pages\\/about\",\"title\":\"About\",\"position\":2},{\"url\":\"\\/pages\\/help\",\"title\":\"Help\",\"position\":3},{\"url\":\"\\/contact\",\"title\":\"Contact\",\"position\":4}]','2018-10-30 01:06:03','2018-10-30 01:06:03');
+/*!40000 ALTER TABLE `menus` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `messages`
+--
+
+DROP TABLE IF EXISTS `messages`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `messages` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `message` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `is_seen` tinyint(1) NOT NULL DEFAULT '0',
+  `deleted_from_sender` tinyint(1) NOT NULL DEFAULT '0',
+  `deleted_from_receiver` tinyint(1) NOT NULL DEFAULT '0',
+  `user_id` int(11) NOT NULL,
+  `conversation_id` int(11) NOT NULL,
+  `attachments` text COLLATE utf8mb4_unicode_ci,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `messages`
+--
+
+LOCK TABLES `messages` WRITE;
+/*!40000 ALTER TABLE `messages` DISABLE KEYS */;
+/*!40000 ALTER TABLE `messages` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `meta_attributes`
+--
+
+DROP TABLE IF EXISTS `meta_attributes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `meta_attributes` (
+  `meta_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `meta_key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `meta_value` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `meta_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'string',
+  `meta_group` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `metable_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `metable_id` bigint(20) unsigned NOT NULL,
+  PRIMARY KEY (`meta_id`),
+  KEY `meta_attributes_metable_type_metable_id_index` (`metable_type`,`metable_id`),
+  KEY `meta_attributes_meta_key_index` (`meta_key`),
+  KEY `meta_attributes_index_value` (`meta_key`,`meta_value`(20))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `meta_attributes`
+--
+
+LOCK TABLES `meta_attributes` WRITE;
+/*!40000 ALTER TABLE `meta_attributes` DISABLE KEYS */;
+/*!40000 ALTER TABLE `meta_attributes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `migrations`
+--
+
+DROP TABLE IF EXISTS `migrations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `migrations` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `batch` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `migrations`
+--
+
+LOCK TABLES `migrations` WRITE;
+/*!40000 ALTER TABLE `migrations` DISABLE KEYS */;
+INSERT INTO `migrations` VALUES (1,'2017_03_04_000000_create_bans_table',1),(2,'2018_05_03_154820_create_categories_table',1),(3,'2018_05_03_154820_create_category_pricing_model_table',1),(4,'2018_05_03_154820_create_conversations_table',1),(5,'2018_05_03_154820_create_favorites_table',1),(6,'2018_05_03_154820_create_filters_table',1),(7,'2018_05_03_154820_create_listings_table',1),(8,'2018_05_03_154820_create_ltm_translations_table',1),(9,'2018_05_03_154820_create_menus_table',1),(10,'2018_05_03_154820_create_messages_table',1),(11,'2018_05_03_154820_create_meta_attributes_table',1),(12,'2018_05_03_154820_create_page_translations_table',1),(13,'2018_05_03_154820_create_pages_table',1),(14,'2018_05_03_154820_create_password_resets_table',1),(15,'2018_05_03_154820_create_pricing_models_table',1),(16,'2018_05_03_154820_create_settings_table',1),(17,'2018_05_03_154820_create_users_meta_table',1),(18,'2018_05_03_154820_create_users_table',1),(19,'2018_05_03_154820_create_widgets_table',1),(20,'2018_05_03_154821_add_foreign_keys_to_users_meta_table',1);
+/*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `page_translations`
+--
+
+DROP TABLE IF EXISTS `page_translations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `page_translations` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `locale` char(5) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `content` text COLLATE utf8mb4_unicode_ci,
+  `seo_title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `seo_meta_description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `seo_meta_keywords` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `visible` tinyint(1) NOT NULL DEFAULT '1',
+  `published_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `page_translations`
+--
+
+LOCK TABLES `page_translations` WRITE;
+/*!40000 ALTER TABLE `page_translations` DISABLE KEYS */;
+INSERT INTO `page_translations` VALUES (1,'en','Home','',NULL,'Home',NULL,NULL,1,NULL,'2018-10-30 01:06:03','2018-10-30 01:06:03',NULL),(2,'en','Help','help','<h4>What is this marketplace about?</h4>\n<p>Tell the user what the website is about</p>\n<h4>What can I sell?</h4>\n<p>Tell sellers what how they can use the website</p>\n<h4>What can I buy?</h4>\n<p>Tell buyers how they can use the website</p>','For sale','For sale meta','houses for sale, yes',1,NULL,'2018-10-30 01:06:03','2018-10-30 01:06:03',NULL),(3,'en','About us','about','<p>Enter your about us text here</p>',NULL,NULL,NULL,1,NULL,'2018-10-30 01:06:03','2018-10-30 01:06:03',NULL),(4,'en','Terms and conditions','terms-and-conditions','<p>Enter your terms and conditions here.</p>','Terms and conditions',NULL,NULL,1,NULL,'2018-10-30 01:06:03','2018-10-30 01:06:03',NULL),(5,'en','Privacy policy','privacy-policy','<p>Enter your privacy policy here</p>','Privacy policy',NULL,NULL,1,NULL,'2018-10-30 01:06:03','2018-10-30 01:06:03',NULL);
+/*!40000 ALTER TABLE `page_translations` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `pages`
+--
+
+DROP TABLE IF EXISTS `pages`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pages` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `template` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pages`
+--
+
+LOCK TABLES `pages` WRITE;
+/*!40000 ALTER TABLE `pages` DISABLE KEYS */;
+/*!40000 ALTER TABLE `pages` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `password_resets`
+--
+
+DROP TABLE IF EXISTS `password_resets`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `password_resets` (
+  `email` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` datetime DEFAULT NULL,
+  KEY `password_resets_email_index` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `password_resets`
+--
+
+LOCK TABLES `password_resets` WRITE;
+/*!40000 ALTER TABLE `password_resets` DISABLE KEYS */;
+/*!40000 ALTER TABLE `password_resets` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `pricing_models`
+--
+
+DROP TABLE IF EXISTS `pricing_models`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pricing_models` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `seller_label` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `widget` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `unit_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `duration_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `price_display` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT 'unit' COMMENT 'unit/duration',
+  `breakdown_display` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT 'unit' COMMENT 'unit/duration',
+  `quantity_label` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT 'quantity',
+  `can_accept_payments` tinyint(1) DEFAULT '0',
+  `can_add_variants` tinyint(1) DEFAULT '0',
+  `can_add_shipping` tinyint(1) DEFAULT '0',
+  `can_add_pricing` tinyint(1) DEFAULT '0',
+  `can_add_additional_pricing` tinyint(1) DEFAULT '0',
+  `requires_shipping_address` tinyint(1) DEFAULT '0',
+  `requires_billing_address` tinyint(1) DEFAULT '0',
+  `meta` text COLLATE utf8mb4_unicode_ci,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pricing_models`
+--
+
+LOCK TABLES `pricing_models` WRITE;
+/*!40000 ALTER TABLE `pricing_models` DISABLE KEYS */;
+INSERT INTO `pricing_models` VALUES (1,'List something','Post an announcement','request','unit',NULL,'unit','unit','quantity',0,0,0,0,0,0,0,NULL,'2018-10-30 01:06:03','2018-10-30 01:06:03');
+/*!40000 ALTER TABLE `pricing_models` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `settings`
+--
+
+DROP TABLE IF EXISTS `settings`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `settings` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `key` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `value` text COLLATE utf8mb4_unicode_ci,
+  PRIMARY KEY (`id`),
+  KEY `settings_key_index` (`key`)
+) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `settings`
+--
+
+LOCK TABLES `settings` WRITE;
+/*!40000 ALTER TABLE `settings` DISABLE KEYS */;
+INSERT INTO `settings` VALUES (3,'site_name','MarketplaceKit'),(5,'theme','default'),(6,'currency','GBP'),(7,'name','Request'),(8,'widget','buy'),(9,'unit_name','property'),(10,'duration_name',''),(11,'can_add_pricing','1'),(13,'default_pricing_model','4'),(14,'home_title','Home'),(15,'home_description',''),(16,'site_title','Title'),(19,'show_map','1'),(20,'show_list','1'),(21,'show_grid','1'),(22,'default_view','grid'),(23,'site_description','Description'),(28,'site_logo','../../logo.png'),(29,'distance_unit','miles'),(30,'default_locale','en'),(31,'supported_locales.0','en'),(35,'listings_require_verification','0'),(36,'site_url','/'),(37,'enable_geo_search','1'),(38,'marketplace_transaction_fee','3'),(39,'marketplace_percentage_fee','20'),(40,'email_address',''),(41,'paypal_email',''),(42,'paypal_username',''),(43,'paypal_password',''),(44,'paypal_signature',''),(45,'paypal_mode','sandbox'),(59,'google_analytics_key',NULL),(60,'google_maps_key',NULL),(61,'stripe_publishable_key',NULL),(62,'facebook_key',NULL),(63,'facebook_secret',NULL),(64,'custom_homepage','0'),(65,'show_search_sidebar','0'),(66,'stripe_secret_key',NULL);
+/*!40000 ALTER TABLE `settings` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `users` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `display_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `username` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `slug` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `bio` text COLLATE utf8mb4_unicode_ci,
+  `phone` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `avatar` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `password` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `gender` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `city` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `region` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `country` char(3) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `country_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `locale` char(5) COLLATE utf8mb4_unicode_ci DEFAULT 'en',
+  `unread_messages` int(11) DEFAULT '0',
+  `is_admin` tinyint(1) DEFAULT '0',
+  `ip_address` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `last_login_at` datetime DEFAULT NULL,
+  `last_login_ip` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `blocked_at` datetime DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  `can_accept_payments` tinyint(1) DEFAULT '0',
+  `verified` tinyint(1) NOT NULL DEFAULT '0',
+  `verification_token` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `banned_at` datetime DEFAULT NULL,
+  `provider` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `provider_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `users_email_unique` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users`
+--
+
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (4,'Admin',NULL,'admin','admin',NULL,NULL,'admin@example.com',NULL,'$2y$10$dtoa.FOZujxOyyJC97nGR.FiogWBxFD05ljLc8iv3HjnQOH02B9Jm','NP9hfOteArBgCyOt0WV97UcU2VbuzBTeSOTpPMCnBmyCGvI3RyVIEZ4qQFQM',NULL,NULL,NULL,NULL,NULL,'en',0,1,NULL,'2018-10-30 01:15:28','172.20.0.2',NULL,'2018-10-30 01:06:02','2018-10-30 01:16:01',NULL,0,0,NULL,NULL,NULL,NULL);
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `users_meta`
+--
+
+DROP TABLE IF EXISTS `users_meta`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `users_meta` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned NOT NULL,
+  `type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'null',
+  `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `value` text COLLATE utf8mb4_unicode_ci,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `users_meta_user_id_index` (`user_id`),
+  KEY `users_meta_key_index` (`key`),
+  CONSTRAINT `users_meta_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users_meta`
+--
+
+LOCK TABLES `users_meta` WRITE;
+/*!40000 ALTER TABLE `users_meta` DISABLE KEYS */;
+/*!40000 ALTER TABLE `users_meta` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `widgets`
+--
+
+DROP TABLE IF EXISTS `widgets`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `widgets` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `alignment` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `locale` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `metadata` text COLLATE utf8mb4_unicode_ci,
+  `background` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `position` int(11) DEFAULT NULL,
+  `style` text COLLATE utf8mb4_unicode_ci,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `widgets`
+--
+
+LOCK TABLES `widgets` WRITE;
+/*!40000 ALTER TABLE `widgets` DISABLE KEYS */;
+INSERT INTO `widgets` VALUES (1,'Buy, Sell & Explore','center','hero','en','\"What are you searching for? Start your search below, and don\'t forget, it\'s free to place a listing for sale with us!\"','white',0,NULL,'2018-10-30 01:06:03','2018-10-30 01:06:03'),(2,'Latest listings',NULL,'latest_listings','en',NULL,'light',1,NULL,'2018-10-30 01:06:03','2018-10-30 01:06:03'),(3,'Categories','center','category_listing','en',NULL,'white',2,NULL,'2018-10-30 01:06:03','2018-10-30 01:06:03'),(4,'Popular listings',NULL,'popular_listings','en',NULL,'light',3,NULL,'2018-10-30 01:06:03','2018-10-30 01:06:03'),(5,'Why should you join us?','center','paragraph','en','[{\"title\":\"For Sellers & Renters\",\"icon\":\"store\",\"blurb\":\"If you have anything to sell, equipment or even space to rent - list it with us for free and get some extra exposure\",\"link\":\"\\/create\",\"link_text\":\"Sell something\"},{\"title\":\"For Buyers\",\"icon\":\"cart\",\"blurb\":\"Explore a range of products from smartphones to rental properties and dog walking services\",\"link\":\"\\/browse\",\"link_text\":\"Browse products & services\"},{\"title\":\"For Professionals & Workers\",\"icon\":\"axe\",\"blurb\":\"Fitness instructor, dog walker? Advertise your services to our community and earn a little extra\",\"link\":\"\\/create\",\"link_text\":\"List your service\"}]','white',4,NULL,'2018-10-30 01:06:03','2018-10-30 01:06:03'),(6,'Featured categories','left','image_gallery','en','[{\"title\":\"Nature\",\"image\":\"https:\\/\\/source.unsplash.com\\/618x221\\/?nature\",\"link\":\"\\/browse\",\"columns\":\"8\"},{\"image\":\"https:\\/\\/source.unsplash.com\\/400x300\\/?water\",\"link\":\"\\/browse?view=grid&distance=0&category=1\",\"columns\":\"4\"},{\"image\":\"https:\\/\\/source.unsplash.com\\/400x300\\/?garden\",\"link\":\"\\/browse?view=list&distance=0&category=1\",\"columns\":\"4\"},{\"image\":\"https:\\/\\/source.unsplash.com\\/400x300\\/?car\",\"link\":\"\\/browse?view=map&distance=0&category=1\",\"columns\":\"4\"},{\"image\":\"https:\\/\\/source.unsplash.com\\/400x300\\/?bicycle\",\"link\":\"\\/listing\\/Q81KoWKz3V\\/my-first-listing\",\"columns\":\"4\"}]','light',5,NULL,'2018-10-30 01:06:03','2018-10-30 01:06:03'),(7,'Featured listings\n',NULL,'featured_listings','en',NULL,'white',6,NULL,'2018-10-30 01:06:03','2018-10-30 01:06:03'),(8,'Video','center','video','en','\"https:\\/\\/www.youtube.com\\/watch?v=B7wkzmZ4GBw\"','light',7,NULL,'2018-10-30 01:06:03','2018-10-30 01:06:03');
+/*!40000 ALTER TABLE `widgets` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2018-10-30  1:24:04
